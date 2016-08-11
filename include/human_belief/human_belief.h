@@ -8,13 +8,13 @@
 #include "human_belief/human_measurement.h"
 #include "human_belief/human_likelihood.h"
 #include <memory>
-
+#include <human_belief/String_cmd.h>
 
 class Human_belief{
 
 public:
 
-    Human_belief(wobj::WrapObject& wrap_object);
+    Human_belief(ros::NodeHandle& nh,wobj::WrapObject& wrap_object);
 
     void update(const arma::colvec& Y, const arma::colvec& u,const arma::mat33& rot);
 
@@ -34,6 +34,7 @@ private:
 
     void set_initial_pos();
 
+    bool service_callback(human_belief::String_cmd::Request &req, human_belief::String_cmd::Response &res);
 
 private:
 
@@ -50,6 +51,13 @@ private:
     int             init_pmf_param;
     arma::colvec3   init_pos;
 
+    bool            bRun;
+
+
+private:
+
+
+    ros::ServiceServer service;
 
 };
 

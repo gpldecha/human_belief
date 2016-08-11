@@ -47,7 +47,7 @@ int main(int argc, char** argv){
 
     // -------------- Initialise Belief ----------------//
 
-    Human_belief human_belief(table_wrapper.get_wrapped_objects());
+    Human_belief human_belief(nh,table_wrapper.get_wrapped_objects());
     human_belief.init_visualise(nh);
     human_belief.set_pf_color_type(pf::C_WEIGHTS);
     human_belief.set_visualise_mode(opti_rviz::Vis_point_cloud::DEFAULT);
@@ -81,9 +81,6 @@ int main(int argc, char** argv){
         opti_rviz::type_conv::tf2vec(hand_pos,hand_pos_arma);
         opti_rviz::type_conv::tf2mat(hand_rot,hand_rot_arma);
         human_measurement.measurement_one(Y,hand_pos_arma,hand_rot_arma);
-
-
-       // human_belief.update(Y,u,rot);
 
 
         human_belief.visualise();

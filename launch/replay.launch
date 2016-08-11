@@ -32,7 +32,7 @@
 
 
 	<group ns="table">
-		<node name="replay_belief" pkg="human_belief" type="replay_belief_node"/>
+		<node name="replay_belief" pkg="human_belief" type="replay_belief_node" args="-hand_frame /hand_frame"/>
 	</group>
 
 

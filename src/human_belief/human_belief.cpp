@@ -1,7 +1,7 @@
 #include "human_belief/human_belief.h"
 
 
-Human_belief::Human_belief(wobj::WrapObject& wrap_object):
+Human_belief::Human_belief(ros::NodeHandle &nh, wobj::WrapObject& wrap_object):
 human_measurement(wrap_object)
 {
 
@@ -16,6 +16,11 @@ human_measurement(wrap_object)
 
     pmf.reset( new pf::Point_mass_filter(lik_func,hY_func,delta,length,4));
     reset();
+
+    service = nh.advertiseService("pmf",&Human_belief::service_callback,this);
+
+    bRun  = false;
+
 
     ROS_INFO_STREAM("   PMF   INITIALISED  ");
 }
@@ -35,8 +40,10 @@ void Human_belief::reset(){
 
 
 void Human_belief::update(const arma::colvec& Y, const arma::colvec& u,const arma::mat33& rot){
-    pmf->set_rotation(rot);
-    pmf->update(u,Y);
+    if(bRun){
+        pmf->set_rotation(rot);
+        pmf->update(u,Y);
+    }
 }
 
 void Human_belief::init_visualise(ros::NodeHandle &node){
@@ -80,4 +87,31 @@ void Human_belief::init_delta_length(int init_pmf_type, pf::Point_mass_filter::d
         length_.n = 0.7;
         length_.k = 0.2;
     }
+}
+
+
+
+bool Human_belief::service_callback(human_belief::String_cmd::Request& req, human_belief::String_cmd::Response& res){
+
+    std::string cmd = req.cmd;
+
+    if(cmd == "run")
+    {
+        bRun = !bRun;
+
+        if(bRun)
+        {
+            res.res = "pmf set to RUN!";
+        }else{
+            res.res = "pmf set to STOP!";
+        }
+
+    }else if (cmd == "reset")
+    {
+        reset();
+    }else{
+
+    }
+
+    return true;
 }

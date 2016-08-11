@@ -75,6 +75,17 @@ set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE}")
 #   std_msgs  # Or other packages containing msgs
 # )
 
+add_service_files(
+   FILES
+   String_cmd.srv
+)
+
+generate_messages(
+  DEPENDENCIES
+  std_msgs
+)
+
+
 ################################################
 ## Declare ROS dynamic reconfigure parameters ##
 ################################################
@@ -142,13 +153,12 @@ add_library(trajectory_replay SHARED ${SRC_DIR}/replay_trajectory.cpp           
 target_link_libraries(trajectory_replay ${catkin_LIBRARIES} ${ARMADILLO_LIBRARIES} boost_system	)
 
 
-
 add_executable(replay_belief_node ${SRC_DIR}/replay_belief.cpp                           )
 target_link_libraries(replay_belief_node ${catkin_LIBRARIES} ${ARMADILLO_LIBRARIES} boost_system belief_replay)
 
 
-add_executable(human_console ${INCLUDE_DIR}/human_belief/human_console.h ${SRC_DIR}/human_belief/human_console.cpp)
-target_link_libraries(human_console ${catkin_LIBRARIES} ${ARMADILLO_LIBRARIES} boost_system belief_replay)
+#add_executable(human_console ${INCLUDE_DIR}/human_belief/human_console.h ${SRC_DIR}/human_belief/human_console.cpp)
+#target_link_libraries(human_console ${catkin_LIBRARIES} ${ARMADILLO_LIBRARIES} boost_system belief_replay)
 
 ## Declare a C++ library
 # add_library(human_belief
