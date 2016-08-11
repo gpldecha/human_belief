@@ -4,16 +4,25 @@ project(human_belief)
 ## Find catkin macros and libraries
 ## if COMPONENTS list like find_package(catkin REQUIRED COMPONENTS xyz)
 ## is used, also find other catkin packages
-find_package(catkin REQUIRED)
+find_package(catkin REQUIRED world_wrapper wrap_object objects
+optitrack_rviz tf std_msgs peg_filter particle_filter table_wrapper)
 
-## System dependencies are found with CMake's conventions
-# find_package(Boost REQUIRED COMPONENTS system)
+find_package(Boost)
+find_package(Armadillo)
 
+if(ARMADILLO_FOUND)
+    message(STATUS "${Green} libarmadillo found ${ColourReset} "            )
+    message(STATUS "    ${ARMADILLO_INCLUDE_DIRS}"                          )
+    message(STATUS "    ${ARMADILLO_LIBRARIES}"                             )
+elseif(ARMADILLO_FOUND)
+    message(FATAL_ERROR "${Red} libarmadillo NOT FOUND! ${ColourReset}"     )
+endif(ARMADILLO_FOUND)
 
-## Uncomment this if the package has a setup.py. This macro ensures
-## modules and global scripts declared therein get installed
-## See http://ros.org/doc/api/catkin/html/user_guide/setup_dot_py.html
-# catkin_python_setup()
+#-fopenmp
+
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -O2 -O3 -std=c++11 -mtune=native -fPIC -Wall -Wno-unused-variable -Wno-deprecated-declarations -fopenmp")        ## Optimize
+set(CMAKE_BUILD_TYPE Release)
+set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE}")
 
 ################################################
 ## Declare ROS messages, services and actions ##
@@ -96,9 +105,9 @@ find_package(catkin REQUIRED)
 ## CATKIN_DEPENDS: catkin_packages dependent projects also need
 ## DEPENDS: system dependencies of this project that dependent projects also need
 catkin_package(
-#  INCLUDE_DIRS include
-#  LIBRARIES human_belief
-#  CATKIN_DEPENDS other_catkin_pkg
+  INCLUDE_DIRS include
+  LIBRARIES peg_in_hole
+  CATKIN_DEPENDS message_runtime world_wrapper objects
 #  DEPENDS system_lib
 )
 
@@ -106,9 +115,40 @@ catkin_package(
 ## Build ##
 ###########
 
-## Specify additional locations of header files
-## Your package locations should be listed before other locations
-# include_directories(include)
+set(INCLUDE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/include)
+set(SRC_DIR ${CMAKE_CURRENT_SOURCE_DIR}/src)
+
+include_directories(${catkin_INCLUDE_DIRS} ${INCLUDE_DIR})
+
+set(H_FILES  	${INCLUDE_DIR}/human_belief/human_belief.h
+                ${INCLUDE_DIR}/human_belief/human_likelihood.h
+                ${INCLUDE_DIR}/human_belief/human_measurement.h
+
+
+)
+
+set(SRC_FILES 	${SRC_DIR}/human_belief/human_belief.cpp
+                ${SRC_DIR}/human_belief/human_likelihood.cpp
+                ${SRC_DIR}/human_belief/human_measurement.cpp
+
+)
+
+# Human belief REPLAY (LIB)
+
+add_library(belief_replay SHARED ${H_FILES} ${SRC_FILES}                          		)
+target_link_libraries(belief_replay ${catkin_LIBRARIES} ${ARMADILLO_LIBRARIES} boost_system	)
+
+add_library(trajectory_replay SHARED ${SRC_DIR}/replay_trajectory.cpp                           )
+target_link_libraries(trajectory_replay ${catkin_LIBRARIES} ${ARMADILLO_LIBRARIES} boost_system	)
+
+
+
+add_executable(replay_belief_node ${SRC_DIR}/replay_belief.cpp                           )
+target_link_libraries(replay_belief_node ${catkin_LIBRARIES} ${ARMADILLO_LIBRARIES} boost_system belief_replay)
+
+
+add_executable(human_console ${INCLUDE_DIR}/human_belief/human_console.h ${SRC_DIR}/human_belief/human_console.cpp)
+target_link_libraries(human_console ${catkin_LIBRARIES} ${ARMADILLO_LIBRARIES} boost_system belief_replay)
 
 ## Declare a C++ library
 # add_library(human_belief

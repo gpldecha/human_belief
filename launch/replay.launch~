@@ -1,0 +1,43 @@
+<?xml version="1.0" ?>
+<launch>
+
+	<!-- arg -->
+	<arg name="gui" 		default="False" />
+	<arg name="hand_frame_vision" 	value="/hand_root"/>
+	<arg name="world_frame" 	value="/world"/>
+        <arg name="hand_frame"		value="/hand"/>
+
+	<arg name="load_tf_folder"	value="/home/guillaume/roscode/catkin_ws3/src/table_search/saved"/>
+	<arg name="load_save"		value="False"/>
+	
+	<param name="use_gui" value="$(arg gui)"/>
+
+	
+	<!-- launch optitrack -->
+	<!--include file="$(find optitrack)/launch/optitrack.launch" /-->
+
+	<!--0.707107 0.707107-->	
+
+	<!-- small table URDF -->
+	<include file="$(find table_description)/launch/table.launch">
+		<arg name="table_urdf_name"		value="table_block"/>
+	  	<arg name="use_rviz" 			value="False"/>
+		<arg name="origin"   			value="0 0 0"/>
+		<arg name="orientation"			value="0 0 0 1"/>	
+		<arg name="use_table_broadcaster" 	value="False"/>
+		<arg name="use_broadcaster" 		value="True"/>
+		<arg name="save_path"			value="$(arg load_tf_folder)"/>
+		<arg name="load_saved"			value="$(arg load_save)"/>
+	</include>	
+
+
+	<group ns="table">
+		<node name="replay_belief" pkg="human_belief" type="replay_belief_node"/>
+	</group>
+
+
+	<!-- Rviz -->
+	<node name="rviz" pkg="rviz" type="rviz" args="-d $(find human_belief)/launch/rviz/human_belief.rviz" required="true" />
+
+
+</launch>

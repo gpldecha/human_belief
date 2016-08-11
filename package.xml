@@ -42,6 +42,35 @@
   <buildtool_depend>catkin</buildtool_depend>
 
 
+  <build_depend>    objects       </build_depend>
+  <run_depend>      objects       </run_depend>
+
+  <build_depend>    roscpp        </build_depend>
+  <run_depend>      roscpp        </run_depend>
+
+  <build_depend>    world_wrapper   </build_depend>
+  <run_depend>      world_wrapper   </run_depend>
+
+  <build_depend>    wrap_object   </build_depend>
+  <run_depend>      wrap_object   </run_depend>
+
+  <build_depend>    optitrack_rviz       </build_depend>
+  <run_depend>      optitrack_rviz       </run_depend>
+
+  <build_depend>    peg_filter       </build_depend>
+  <run_depend>      peg_filter       </run_depend>
+
+  <build_depend>    particle_filter       </build_depend>
+  <run_depend>      particle_filter       </run_depend>
+
+  <build_depend>    table_wrapper       </build_depend>
+  <run_depend>      table_wrapper       </run_depend>
+
+  <build_depend>    tf   </build_depend>
+  <run_depend>      tf   </run_depend>
+
+  <build_depend>    message_runtime       </build_depend>
+  <run_depend>      message_runtime       </run_depend>
   <!-- The export tag contains other, unspecified, tags -->
   <export>
     <!-- Other tools can request additional information be placed here -->
