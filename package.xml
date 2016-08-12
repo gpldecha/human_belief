@@ -57,9 +57,6 @@
   <build_depend>    optitrack_rviz       </build_depend>
   <run_depend>      optitrack_rviz       </run_depend>
 
-  <build_depend>    peg_filter       </build_depend>
-  <run_depend>      peg_filter       </run_depend>
-
   <build_depend>    particle_filter       </build_depend>
   <run_depend>      particle_filter       </run_depend>
 

@@ -1,0 +1,10 @@
+<?xml version="1.0" ?>
+<launch>
+
+	<include file="$(find table_description)/launch/table.launch">
+		<arg name="path_save"   default="/home/guillaume/roscode/recorded_data/"/>
+		<arg name="topic"  	default=""/>
+		<arg name="file_name"  	default="human_belief"/>		
+	<include/>
+
+</launch>

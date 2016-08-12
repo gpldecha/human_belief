@@ -2,8 +2,13 @@
 
 
 Human_belief::Human_belief(ros::NodeHandle &nh, wobj::WrapObject& wrap_object):
-human_measurement(wrap_object)
+human_measurement(nh,wrap_object,false),
+  human_likelihood(wrap_object)
 {
+
+    init_pos(0) = -7.3861;
+    init_pos(1) = 0.6;
+    init_pos(2) = 0.82;
 
     lik_func  =  std::bind(&Human_likelihood::likelihood,   &human_likelihood, std::placeholders::_1,std::placeholders::_2,std::placeholders::_3,std::placeholders::_4);
     hY_func   =  std::bind(&Human_measurement::measurement, &human_measurement,std::placeholders::_1,std::placeholders::_2,std::placeholders::_3);
@@ -20,6 +25,8 @@ human_measurement(wrap_object)
     service = nh.advertiseService("pmf",&Human_belief::service_callback,this);
 
     bRun  = false;
+
+
 
 
     ROS_INFO_STREAM("   PMF   INITIALISED  ");
@@ -73,8 +80,8 @@ void Human_belief::init_delta_length(int init_pmf_type, pf::Point_mass_filter::d
         delta_.n  = 0.03;
         delta_.k  = 0.02;
 
-        length_.m = 0.5;
-        length_.n = 1.2;
+        length_.m = 1.2;
+        length_.n = 0.7;
         length_.k = 0.15;
     }
     else if(init_pmf_type == 1)

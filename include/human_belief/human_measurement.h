@@ -3,6 +3,7 @@
 
 #include <armadillo>
 #include <wrapobject.h>
+#include <visualise/vis_points.h>
 
 /**
  * @brief The Human_measurement class
@@ -26,7 +27,7 @@ public:
 
 public:
 
-    Human_measurement(wobj::WrapObject& wrap_object);
+    Human_measurement(ros::NodeHandle& nh, wobj::WrapObject& wrap_object,bool bVisualise);
 
 
     void measurement_one(arma::colvec& Y, const arma::colvec x_, const arma::mat33& Rot);
@@ -41,8 +42,11 @@ public:
 private:
 
     wobj::WrapObject& wrap_object;
-
     geo::fCVec3 x;
+
+    bool bVisualise;
+    boost::shared_ptr<opti_rviz::Vis_points> vis_proj_sur,vis_proj_edge, vis_proj_corner;
+    std::vector<tf::Vector3> v_surf,v_edge,v_corner;
 
 };
 

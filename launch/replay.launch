@@ -5,7 +5,7 @@
 	<arg name="gui" 		default="False" />
 	<arg name="hand_frame_vision" 	value="/hand_root"/>
 	<arg name="world_frame" 	value="/world"/>
-        <arg name="hand_frame"		value="/hand"/>
+        <arg name="hand_frame"		value="/human_hand/pose"/>
 
 	<arg name="load_tf_folder"	value="/home/guillaume/roscode/catkin_ws3/src/table_search/saved"/>
 	<arg name="load_save"		value="False"/>
@@ -22,7 +22,7 @@
 	<include file="$(find table_description)/launch/table.launch">
 		<arg name="table_urdf_name"		value="table_block"/>
 	  	<arg name="use_rviz" 			value="False"/>
-		<arg name="origin"   			value="0 0 0"/>
+		<arg name="origin"   			value="-7.3861 0.62543 0.87509"/>
 		<arg name="orientation"			value="0 0 0 1"/>	
 		<arg name="use_table_broadcaster" 	value="False"/>
 		<arg name="use_broadcaster" 		value="True"/>
@@ -32,7 +32,7 @@
 
 
 	<group ns="table">
-		<node name="replay_belief" pkg="human_belief" type="replay_belief_node" args="-hand_frame /hand_frame"/>
+		<node name="replay_belief" pkg="human_belief" type="replay_belief_node" args="-hand_frame /human_hand/base_link" output="screen"/>
 	</group>
 
 
