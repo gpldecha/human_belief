@@ -31,13 +31,8 @@
 	</include>	
 
 
-	<group ns="table">
-		<node name="replay_belief" pkg="human_belief" type="replay_belief_node" args="-hand_frame /human_hand/base_link" output="screen"/>
-	</group>
-
-
 	<!-- Rviz -->
-	<node name="rviz" pkg="rviz" type="rviz" args="-d $(find human_belief)/launch/rviz/human_belief.rviz" required="true" />
+	<node name="rviz" pkg="rviz" type="rviz" args="-d $(find human_belief)/launch/rviz/human_belief_replay.rviz" required="true" />
 
 
 </launch>

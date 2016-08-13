@@ -48,8 +48,8 @@ int main(int argc, char** argv){
 
     Human_belief human_belief(nh,table_wrapper.get_wrapped_objects());
     human_belief.init_visualise(nh);
-    human_belief.set_pf_color_type(pf::C_LIKE);
-    human_belief.set_visualise_mode(opti_rviz::Vis_point_cloud::DEFAULT);
+    human_belief.set_pf_color_type(pf::C_WEIGHTS);
+    human_belief.set_visualise_mode(opti_rviz::Vis_point_cloud::ONLY_HIGH_WEIGHTS);
 
     // -------------- Initialise Virtual Hand Sensor ---//
 

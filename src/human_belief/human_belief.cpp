@@ -7,13 +7,13 @@ human_measurement(nh,wrap_object,false),
 {
 
     init_pos(0) = -7.3861;
-    init_pos(1) = 0.6;
-    init_pos(2) = 0.82;
+    init_pos(1) = 0.55;
+    init_pos(2) = 0.85;
 
     lik_func  =  std::bind(&Human_likelihood::likelihood,   &human_likelihood, std::placeholders::_1,std::placeholders::_2,std::placeholders::_3,std::placeholders::_4);
     hY_func   =  std::bind(&Human_measurement::measurement, &human_measurement,std::placeholders::_1,std::placeholders::_2,std::placeholders::_3);
 
-    init_pmf_param = 0;
+    init_pmf_param = 1;
 
     pf::Point_mass_filter::delta       delta;
     pf::Point_mass_filter::length      length;
@@ -25,9 +25,6 @@ human_measurement(nh,wrap_object,false),
     service = nh.advertiseService("pmf",&Human_belief::service_callback,this);
 
     bRun  = false;
-
-
-
 
     ROS_INFO_STREAM("   PMF   INITIALISED  ");
 }
@@ -41,6 +38,11 @@ void Human_belief::reset(){
     pf::Point_mass_filter::delta       delta;
     pf::Point_mass_filter::length      length;
     init_delta_length(init_pmf_param,delta,length);
+
+    tf::StampedTransform transform;
+    opti_rviz::Listener::get_tf_once("world","/human_hand/base_link",transform);
+    tf::Vector3  hand_origin = transform.getOrigin();
+    init_pos(2) = hand_origin.getZ();
 
     pmf->reset(init_pos,delta,length);
 }
@@ -76,8 +78,8 @@ void Human_belief::init_delta_length(int init_pmf_type, pf::Point_mass_filter::d
 
     if(init_pmf_type == 0)
     {
-        delta_.m  = 0.02;
-        delta_.n  = 0.03;
+        delta_.m  = 0.05;
+        delta_.n  = 0.05;
         delta_.k  = 0.02;
 
         length_.m = 1.2;
@@ -86,13 +88,13 @@ void Human_belief::init_delta_length(int init_pmf_type, pf::Point_mass_filter::d
     }
     else if(init_pmf_type == 1)
     {
-        delta_.m  = 0.01;
-        delta_.n  = 0.04;
-        delta_.k  = 0.04;
+        delta_.m  = 0.05;
+        delta_.n  = 0.05;
+        delta_.k  = 0.025;
 
-        length_.m = 0.2;
-        length_.n = 0.7;
-        length_.k = 0.2;
+        length_.m = 0.7;
+        length_.n = 0.5;
+        length_.k = 0.05;
     }
 }
 

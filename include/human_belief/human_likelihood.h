@@ -37,9 +37,16 @@ private:
   wobj::WrapObject& wrap_object;
   arma::colvec3 hY;
   geo::fCVec3 x;
- arma::colvec Y_;
- double max_dist;
+  arma::colvec Y_;
+  double max_dist;
+  double max_dist_surf;
+  geo::fCVec3 P;
 
+  wobj::WBox& table;
+  wobj::WBox& cube;
+
+  double dist_table_top, dist_surf_cube, min_dist_surf;
+  double dist_edge;
 
 
 };

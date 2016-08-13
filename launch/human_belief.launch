@@ -22,7 +22,7 @@
 	<include file="$(find table_description)/launch/table.launch">
 		<arg name="table_urdf_name"		value="table_block"/>
 	  	<arg name="use_rviz" 			value="False"/>
-		<arg name="origin"   			value="-7.3861 0.62543 0.75"/>
+		<arg name="origin"   			value="-7.3861 0.62543 0.85"/>
 		<arg name="orientation"			value="0 0 0 1"/>	
 		<arg name="use_table_broadcaster" 	value="False"/>
 		<arg name="use_broadcaster" 		value="True"/>
@@ -31,8 +31,13 @@
 	</include>	
 
 
+	<group ns="table">
+		<node name="replay_belief" pkg="human_belief" type="replay_belief_node" args="-hand_frame /human_hand/base_link" output="screen"/>
+	</group>
+
+
 	<!-- Rviz -->
-	<node name="rviz" pkg="rviz" type="rviz" args="-d $(find human_belief)/launch/rviz/human_belief_replay.rviz" required="true" />
+	<node name="rviz" pkg="rviz" type="rviz" args="-d $(find human_belief)/launch/rviz/human_belief.rviz" required="true" />
 
 
 </launch>
